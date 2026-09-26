@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Health Check Taboo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #14201a;
+    --bg-2: #1c2c23;
+    --panel: #203228;
+    --panel-line: #33473b;
+    --paper: #f4ead3;
+    --paper-shadow: #d9c599;
+    --ink: #2b2417;
+    --ink-soft: #6b5f45;
+    --amber: #e3a83b;
+    --amber-ink: #402d0a;
+    --red: #c1443c;
+    --red-dark: #8f2f29;
+    --teal: #4f9a8f;
+    --teal-dark: #326960;
+    --cream: #f4ead3;
+    --muted: #a9beb2;
+    --focus: #f0c869;
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #f6f1e2;
+      --bg-2: #ffffff;
+      --panel: #ffffff;
+      --panel-line: #e2d5ac;
+      --paper: #fffdf7;
+      --paper-shadow: #e6d9ae;
+      --ink: #2b2417;
+      --ink-soft: #6b5f45;
+      --amber: #c1860f;
+      --amber-ink: #2c1f04;
+      --red: #b3403a;
+      --red-dark: #7a2b26;
+      --teal: #2f7d72;
+      --teal-dark: #1f544c;
+      --cream: #2b2417;
+      --muted: #756a4d;
+      --focus: #c1860f;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #f6f1e2;
+    --bg-2: #ffffff;
+    --panel: #ffffff;
+    --panel-line: #e2d5ac;
+    --paper: #fffdf7;
+    --paper-shadow: #e6d9ae;
+    --ink: #2b2417;
+    --ink-soft: #6b5f45;
+    --amber: #c1860f;
+    --amber-ink: #2c1f04;
+    --red: #b3403a;
+    --red-dark: #7a2b26;
+    --teal: #2f7d72;
+    --teal-dark: #1f544c;
+    --cream: #2b2417;
+    --muted: #756a4d;
+    --focus: #c1860f;
+  }
+  :root[data-theme="dark"] {
+    --bg: #14201a;
+    --bg-2: #1c2c23;
+    --panel: #203228;
+    --panel-line: #33473b;
+    --paper: #f4ead3;
+    --paper-shadow: #d9c599;
+    --ink: #2b2417;
+    --ink-soft: #6b5f45;
+    --amber: #e3a83b;
+    --amber-ink: #402d0a;
+    --red: #c1443c;
+    --red-dark: #8f2f29;
+    --teal: #4f9a8f;
+    --teal-dark: #326960;
+    --cream: #f4ead3;
+    --muted: #a9beb2;
+    --focus: #f0c869;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--cream);
+    font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    min-height: 100%;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(227,168,59,0.06), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(79,154,143,0.08), transparent 45%);
+  }
+  h1, h2, h3, .display {
+    font-family: 'Bricolage Grotesque', 'Inter', sans-serif;
+    letter-spacing: -0.01em;
+  }
+  button {
+    font-family: inherit;
+  }
+  :focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 2px;
+  }
+
+  .wrap {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 28px 18px 60px;
+  }
+
+  /* ---------- Header ---------- */
+  .app-header {
+    text-align: center;
+    margin-bottom: 22px;
+    position: relative;
+  }
+  .theme-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 1px solid var(--panel-line);
+    background: var(--panel);
+    color: var(--cream);
+    border-radius: 999px;
+    padding: 7px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .theme-toggle:hover { border-color: var(--amber); }
+  .app-header .kicker {
+    color: var(--amber);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin: 0 0 4px;
+  }
+  .app-header h1 {
+    font-size: clamp(1.9rem, 5vw, 2.6rem);
+    font-weight: 800;
+    margin: 0 0 6px;
+    line-height: 1.05;
+  }
+  .app-header p {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.98rem;
+  }
+
+  /* ---------- Setup screen ---------- */
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-line);
+    border-radius: 18px;
+    padding: 22px;
+    margin-bottom: 18px;
+  }
+  .panel h2 {
+    font-size: 1.05rem;
+    margin: 0 0 14px;
+    color: var(--amber);
+    font-weight: 700;
+  }
+  .team-inputs {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .team-input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .team-input-row label {
+    display: block;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .team-input-row .field {
+    flex: 1;
+  }
+  .team-input-row input {
+    width: 100%;
+    padding: 11px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--panel-line);
+    background: var(--bg-2);
+    color: var(--cream);
+    font-size: 1rem;
+  }
+  .team-input-row input:focus-visible { outline: 3px solid var(--focus); }
+  .remove-team-btn {
+    width: 40px;
+    height: 40px;
+    margin-top: 20px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1px solid var(--panel-line);
+    background: var(--bg-2);
+    color: #d99a95;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+  .remove-team-btn:hover { border-color: var(--red); }
+  .remove-team-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .add-team-btn {
+    border: 1px dashed var(--panel-line);
+    background: transparent;
+    color: var(--amber);
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .add-team-btn:hover { border-color: var(--amber); }
+  .add-team-btn:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    border: 1px solid var(--panel-line);
+    background: var(--bg-2);
+    color: var(--cream);
+    padding: 9px 15px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: background .15s, border-color .15s, color .15s;
+  }
+  .chip[aria-pressed="true"] {
+    background: var(--amber);
+    border-color: var(--amber);
+    color: var(--amber-ink);
+    font-weight: 700;
+  }
+  .chip.cat[aria-pressed="true"] {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #082622;
+  }
+
+  .duration-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .duration-custom {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid var(--panel-line);
+    background: var(--bg-2);
+    border-radius: 999px;
+    padding: 6px 6px 6px 15px;
+  }
+  .duration-custom input {
+    width: 56px;
+    background: transparent;
+    border: none;
+    color: var(--cream);
+    font-size: 0.92rem;
+    text-align: right;
+  }
+  .duration-custom input:focus-visible { outline: none; }
+  .duration-custom span { color: var(--muted); font-size: 0.85rem; }
+  .duration-custom button {
+    background: var(--panel-line);
+    border: none;
+    color: var(--cream);
+    border-radius: 999px;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 0.85rem;
+  }
+
+  .field-note {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin: 10px 0 0;
+  }
+
+  .start-btn {
+    width: 100%;
+    padding: 16px;
+    border-radius: 14px;
+    border: none;
+    background: var(--amber);
+    color: var(--amber-ink);
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    margin-top: 6px;
+  }
+  .start-btn:hover { filter: brightness(1.05); }
+  .start-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .deck-count {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.86rem;
+    margin-top: 10px;
+  }
+
+  /* ---------- Game screen ---------- */
+  .game-view { display: none; }
+  .game-view.active { display: block; }
+  .setup-view.hidden { display: none; }
+
+  .scoreboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .team-panel {
+    border-radius: 16px;
+    padding: 14px 16px;
+    border: 2px solid var(--panel-line);
+    background: var(--panel);
+    cursor: pointer;
+    text-align: left;
+  }
+  .team-panel.active {
+    border-color: var(--amber);
+    background: linear-gradient(180deg, rgba(227,168,59,0.14), rgba(227,168,59,0.03));
+  }
+  .team-panel .t-name {
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .team-panel.active .t-name { color: var(--amber); }
+  .team-panel .t-score {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2.1rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .team-panel .t-turn {
+    font-size: 0.72rem;
+    color: var(--amber);
+    font-weight: 700;
+    margin-top: 4px;
+    visibility: hidden;
+  }
+  .team-panel.active .t-turn { visibility: visible; }
+
+  .timer-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-bottom: 18px;
+  }
+  .timer-display {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 3.2rem;
+    font-weight: 800;
+    min-width: 130px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .timer-display.low { color: var(--red); }
+  .timer-controls {
+    display: flex;
+    gap: 8px;
+  }
+  .icon-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    border: 1px solid var(--panel-line);
+    background: var(--panel);
+    color: var(--cream);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .icon-btn:hover { border-color: var(--amber); }
+
+  .card-stage {
+    perspective: 1200px;
+    margin-bottom: 18px;
+  }
+  .taboo-card {
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 14px;
+    padding: 26px 26px 22px;
+    box-shadow: 0 14px 0 -6px var(--paper-shadow), 0 22px 30px rgba(0,0,0,0.35);
+    transform: rotate(-0.6deg);
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .taboo-card::before {
+    content: "";
+    position: absolute;
+    inset: 10px;
+    border: 1px dashed rgba(43,36,23,0.22);
+    border-radius: 8px;
+    pointer-events: none;
+  }
+  .card-category {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--red-dark);
+    margin-bottom: 10px;
+  }
+  .card-word {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: clamp(2rem, 7vw, 2.7rem);
+    font-weight: 800;
+    line-height: 1.02;
+    margin: 0 0 18px;
+  }
+  .card-hr {
+    border: none;
+    border-top: 1px solid rgba(43,36,23,0.18);
+    margin: 0 0 14px;
+  }
+  .taboo-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 9px;
+    flex: 1;
+  }
+  .taboo-list li {
+    font-size: 1.08rem;
+    font-weight: 600;
+    display: flex;
+    align-items: baseline;
+    gap: 9px;
+    color: var(--ink);
+  }
+  .taboo-list li::before {
+    content: "✕";
+    color: var(--red-dark);
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+  .card-meta {
+    margin-top: 16px;
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+
+  .action-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .action-btn {
+    padding: 16px 8px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+    color: white;
+  }
+  .action-btn.correct { background: var(--teal); color: #082622; }
+  .action-btn.skip { background: var(--panel-line); color: var(--cream); }
+  .action-btn.taboo { background: var(--red); color: #2b0a08; }
+  .action-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+  .action-btn small {
+    display: block;
+    font-weight: 500;
+    font-size: 0.72rem;
+    margin-top: 2px;
+    opacity: 0.85;
+  }
+
+  .game-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .link-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 6px;
+  }
+  .link-btn:hover { color: var(--amber); }
+
+  .buzz-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(193,68,60,0.92);
+    z-index: 50;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 24px;
+  }
+  .buzz-overlay.show { display: flex; }
+  .buzz-overlay h2 {
+    font-size: clamp(2rem, 8vw, 3rem);
+    margin: 0 0 8px;
+    color: white;
+  }
+  .buzz-overlay p {
+    color: #ffe9e6;
+    margin: 0 0 22px;
+    font-size: 1.05rem;
+  }
+  .buzz-overlay button {
+    padding: 14px 26px;
+    border-radius: 12px;
+    border: none;
+    background: white;
+    color: var(--red-dark);
+    font-weight: 800;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+
+  footer.credit {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+    margin-top: 26px;
+  }
+
+  @media (max-width: 480px) {
+    .action-row { grid-template-columns: 1fr 1fr; }
+    .action-row .action-btn.skip { grid-column: span 2; }
+    .team-inputs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="app-header">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch between light and dark mode">☀️ / 🌙</button>
+    <h1>Health Check Taboo</h1>
+    <p>Advanced vocabulary on health and life skills. Describe the word without saying it, or any word on the banned list.</p>
+  </header>
+
+  <!-- SETUP VIEW -->
+  <section class="setup-view" id="setupView">
+
+    <div class="panel">
+      <h2>Teams</h2>
+      <div class="team-inputs" id="teamInputs"></div>
+      <button class="add-team-btn" id="addTeamBtn" type="button">+ Add another team</button>
+      <p class="field-note" id="teamNote"></p>
+    </div>
+
+    <div class="panel">
+      <h2>Round length</h2>
+      <div class="duration-row" id="durationRow">
+        <button class="chip dur" data-secs="30" aria-pressed="false">30s</button>
+        <button class="chip dur" data-secs="45" aria-pressed="false">45s</button>
+        <button class="chip dur" data-secs="60" aria-pressed="true">60s</button>
+        <button class="chip dur" data-secs="90" aria-pressed="false">90s</button>
+        <button class="chip dur" data-secs="120" aria-pressed="false">120s</button>
+        <div class="duration-custom">
+          <input type="number" id="customSecs" min="10" max="600" placeholder="custom">
+          <span>sec</span>
+          <button id="useCustom" type="button">set</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Topics to include</h2>
+      <div class="chip-row" id="categoryRow"></div>
+      <p class="field-note">Leave everything selected for the full deck, or narrow it to the topics you are teaching this week.</p>
+      <p class="deck-count" id="deckCount"></p>
+    </div>
+
+    <button class="start-btn" id="startBtn">Start game</button>
+  </section>
+
+  <!-- GAME VIEW -->
+  <section class="game-view" id="gameView">
+
+    <div class="scoreboard" id="scoreboard"></div>
+
+    <div class="timer-row">
+      <button class="icon-btn" id="resetTimerBtn" title="Reset timer" aria-label="Reset timer">↺</button>
+      <div class="timer-display" id="timerDisplay">60</div>
+      <button class="icon-btn" id="playPauseBtn" title="Start or pause" aria-label="Start or pause">▶</button>
+    </div>
+
+    <div class="card-stage">
+      <div class="taboo-card">
+        <div class="card-category" id="cardCategory">CATEGORY</div>
+        <h2 class="card-word" id="cardWord">WORD</h2>
+        <hr class="card-hr">
+        <ul class="taboo-list" id="tabooList"></ul>
+        <div class="card-meta" id="cardMeta">card 1 of 36</div>
+      </div>
+    </div>
+
+    <div class="action-row">
+      <button class="action-btn correct" id="correctBtn">Got it<small>+1 point</small></button>
+      <button class="action-btn skip" id="skipBtn">Skip<small>no points</small></button>
+      <button class="action-btn taboo" id="tabooBtn">Taboo<small>&minus;1 point</small></button>
+    </div>
+
+    <div class="game-footer">
+      <span id="deckRemaining">36 cards left in this deck</span>
+      <button class="link-btn" id="endGameBtn">End game and reset scores</button>
+    </div>
+
+  </section>
+
+  <footer class="credit">Nannestad videregående skole · Barbara Anna Zielonka</footer>
+</div>
+
+<div class="buzz-overlay" id="buzzOverlay">
+  <h2>Time!</h2>
+  <p id="buzzText">Switch teams and pass the device.</p>
+  <button id="buzzContinue">Continue</button>
+</div>
+
+<script>
+(function() {
+  "use strict";
+
+  // ---------- Theme (light/dark) ----------
+  var THEME_KEY = "taboo-health-theme";
+  function getStoredTheme() {
+    try { return localStorage.getItem(THEME_KEY); } catch (e) { return null; }
+  }
+  function storeTheme(t) {
+    try { localStorage.setItem(THEME_KEY, t); } catch (e) { /* storage unavailable, ignore */ }
+  }
+  function systemPrefersLight() {
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+  }
+  function applyTheme(theme) {
+    document.documentElement.setAttribute("data-theme", theme);
+    storeTheme(theme);
+  }
+  var startingTheme = getStoredTheme() || (systemPrefersLight() ? "light" : "dark");
+  applyTheme(startingTheme);
+  document.getElementById("themeToggle").addEventListener("click", function() {
+    var current = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+    applyTheme(current === "light" ? "dark" : "light");
+  });
+
+  var CARDS = [
+    {w:"Anxiety", cat:"Mind & mood", taboo:["worried","nervous","stress","fear","panic"]},
+    {w:"Burnout", cat:"Mind & mood", taboo:["tired","exhausted","work","stress","overwhelmed"]},
+    {w:"Resilience", cat:"Mind & mood", taboo:["bounce back","strong","recover","tough","survive"]},
+    {w:"Self-esteem", cat:"Mind & mood", taboo:["confidence","feel good","worth","proud","value"]},
+    {w:"Overwhelmed", cat:"Mind & mood", taboo:["too much","stress","cope","pressure","drowning"]},
+    {w:"Empathy", cat:"Mind & mood", taboo:["understand","feelings","care","shoes","compassion"]},
+    {w:"Perfectionism", cat:"Mind & mood", taboo:["perfect","flaws","standards","enough","control"]},
+    {w:"Gratitude", cat:"Mind & mood", taboo:["thankful","appreciate","grateful","positive","thanks"]},
+    {w:"Vulnerable", cat:"Mind & mood", taboo:["weak","exposed","open","hurt","fragile"]},
+
+    {w:"Insomnia", cat:"Sleep & screens", taboo:["sleep","awake","night","tired","rest"]},
+    {w:"Screen time", cat:"Sleep & screens", taboo:["phone","scroll","hours","device","addicted"]},
+    {w:"Cyberbullying", cat:"Sleep & screens", taboo:["online","mean","harass","internet","hurtful"]},
+    {w:"Mindfulness", cat:"Sleep & screens", taboo:["present","focus","breathe","calm","meditation"]},
+
+    {w:"Body image", cat:"Body & movement", taboo:["mirror","weight","appearance","looks","shape"]},
+    {w:"Sedentary", cat:"Body & movement", taboo:["sitting","lazy","inactive","couch","screen"]},
+    {w:"Junk food", cat:"Body & movement", taboo:["unhealthy","sugar","fast food","snack","fat"]},
+    {w:"Nutrient", cat:"Body & movement", taboo:["vitamin","healthy","food","body","diet"]},
+
+    {w:"Addiction", cat:"Substances & risk", taboo:["hooked","stop","habit","craving","dependent"]},
+    {w:"Withdrawal", cat:"Substances & risk", taboo:["quit","symptoms","addiction","stop","crave"]},
+    {w:"Relapse", cat:"Substances & risk", taboo:["again","fail","return","addiction","recovery"]},
+    {w:"Trigger", cat:"Substances & risk", taboo:["set off","reaction","upset","reminder","cause"]},
+    {w:"Peer pressure", cat:"Substances & risk", taboo:["friends","influence","group","pushed","fit in"]},
+    {w:"Consent", cat:"Substances & risk", taboo:["permission","agree","yes","allow","choice"]},
+
+    {w:"Boundaries", cat:"Relationships & life skills", taboo:["limit","say no","space","respect","line"]},
+    {w:"Support system", cat:"Relationships & life skills", taboo:["friends","family","help","network","lean on"]},
+    {w:"Toxic relationship", cat:"Relationships & life skills", taboo:["bad","unhealthy","hurtful","controlling","damaging"]},
+    {w:"Independence", cat:"Relationships & life skills", taboo:["own","alone","free","decide","adult"]},
+    {w:"Budgeting", cat:"Relationships & life skills", taboo:["money","save","spend","plan","finance"]},
+    {w:"Time management", cat:"Relationships & life skills", taboo:["schedule","organize","plan","priorities","clock"]},
+    {w:"Deadline", cat:"Relationships & life skills", taboo:["due","time","pressure","finish","late"]},
+
+    {w:"Coping mechanism", cat:"Stress & coping", taboo:["deal with","strategy","handle","stress","habit"]},
+    {w:"Comfort zone", cat:"Stress & coping", taboo:["safe","familiar","risk","new","leave"]},
+    {w:"Self-care", cat:"Stress & coping", taboo:["routine","rest","pamper","wellbeing","treat yourself"]},
+    {w:"Procrastination", cat:"Stress & coping", taboo:["delay","later","avoid","deadline","lazy"]},
+    {w:"Motivation", cat:"Stress & coping", taboo:["drive","want","goal","push","reason"]}
+  ];
+
+  var CATEGORIES = [];
+  CARDS.forEach(function(c) { if (CATEGORIES.indexOf(c.cat) === -1) CATEGORIES.push(c.cat); });
+
+  var MIN_TEAMS = 2;
+  var MAX_TEAMS = 6;
+  var teamCounter = 0;
+
+  function newTeam(name) {
+    teamCounter++;
+    return { id: "t" + teamCounter, name: name, score: 0 };
+  }
+
+  var state = {
+    duration: 60,
+    activeCats: {},
+    deck: [],
+    deckIndex: 0,
+    teams: [ newTeam("Team A"), newTeam("Team B") ],
+    activeIndex: 0,
+    timeLeft: 60,
+    running: false,
+    intervalId: null
+  };
+  CATEGORIES.forEach(function(c) { state.activeCats[c] = true; });
+
+  var els = {
+    setupView: document.getElementById("setupView"),
+    gameView: document.getElementById("gameView"),
+    categoryRow: document.getElementById("categoryRow"),
+    deckCount: document.getElementById("deckCount"),
+    startBtn: document.getElementById("startBtn"),
+    teamInputs: document.getElementById("teamInputs"),
+    addTeamBtn: document.getElementById("addTeamBtn"),
+    teamNote: document.getElementById("teamNote"),
+    durationRow: document.getElementById("durationRow"),
+    customSecs: document.getElementById("customSecs"),
+    useCustom: document.getElementById("useCustom"),
+
+    scoreboard: document.getElementById("scoreboard"),
+
+    timerDisplay: document.getElementById("timerDisplay"),
+    playPauseBtn: document.getElementById("playPauseBtn"),
+    resetTimerBtn: document.getElementById("resetTimerBtn"),
+
+    cardCategory: document.getElementById("cardCategory"),
+    cardWord: document.getElementById("cardWord"),
+    tabooList: document.getElementById("tabooList"),
+    cardMeta: document.getElementById("cardMeta"),
+    deckRemaining: document.getElementById("deckRemaining"),
+
+    correctBtn: document.getElementById("correctBtn"),
+    skipBtn: document.getElementById("skipBtn"),
+    tabooBtn: document.getElementById("tabooBtn"),
+    endGameBtn: document.getElementById("endGameBtn"),
+
+    buzzOverlay: document.getElementById("buzzOverlay"),
+    buzzText: document.getElementById("buzzText"),
+    buzzContinue: document.getElementById("buzzContinue")
+  };
+
+  // ---------- Setup screen: category chips ----------
+  CATEGORIES.forEach(function(cat) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.className = "chip cat";
+    b.textContent = cat;
+    b.setAttribute("aria-pressed", "true");
+    b.addEventListener("click", function() {
+      state.activeCats[cat] = !state.activeCats[cat];
+      b.setAttribute("aria-pressed", state.activeCats[cat] ? "true" : "false");
+      updateDeckCount();
+    });
+    els.categoryRow.appendChild(b);
+  });
+
+  function activeCardPool() {
+    return CARDS.filter(function(c) { return state.activeCats[c.cat]; });
+  }
+
+  function updateDeckCount() {
+    var n = activeCardPool().length;
+    els.deckCount.textContent = n + (n === 1 ? " card selected" : " cards selected");
+    els.startBtn.disabled = n === 0;
+  }
+  updateDeckCount();
+
+  // ---------- Setup screen: team rows ----------
+  function renderTeamInputs() {
+    els.teamInputs.innerHTML = "";
+    state.teams.forEach(function(team, i) {
+      var row = document.createElement("div");
+      row.className = "team-input-row";
+
+      var field = document.createElement("div");
+      field.className = "field";
+      var label = document.createElement("label");
+      label.setAttribute("for", "teamName-" + team.id);
+      label.textContent = "Team " + (i + 1) + " name";
+      var input = document.createElement("input");
+      input.type = "text";
+      input.id = "teamName-" + team.id;
+      input.maxLength = 20;
+      input.value = team.name;
+      input.addEventListener("input", function() {
+        team.name = input.value;
+      });
+      field.appendChild(label);
+      field.appendChild(input);
+      row.appendChild(field);
+
+      var removeBtn = document.createElement("button");
+      removeBtn.type = "button";
+      removeBtn.className = "remove-team-btn";
+      removeBtn.textContent = "✕";
+      removeBtn.setAttribute("aria-label", "Remove " + (team.name || "this team"));
+      removeBtn.disabled = state.teams.length <= MIN_TEAMS;
+      removeBtn.addEventListener("click", function() {
+        if (state.teams.length <= MIN_TEAMS) return;
+        state.teams.splice(i, 1);
+        renderTeamInputs();
+      });
+      row.appendChild(removeBtn);
+
+      els.teamInputs.appendChild(row);
+    });
+
+    els.addTeamBtn.disabled = state.teams.length >= MAX_TEAMS;
+    els.teamNote.textContent = state.teams.length >= MAX_TEAMS
+      ? "Maximum of " + MAX_TEAMS + " teams."
+      : "Add a team for every group playing, up to " + MAX_TEAMS + ".";
+  }
+  renderTeamInputs();
+
+  els.addTeamBtn.addEventListener("click", function() {
+    if (state.teams.length >= MAX_TEAMS) return;
+    state.teams.push(newTeam("Team " + String.fromCharCode(65 + state.teams.length)));
+    renderTeamInputs();
+  });
+
+  // ---------- Setup screen: duration chips ----------
+  els.durationRow.querySelectorAll(".dur").forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      els.durationRow.querySelectorAll(".dur").forEach(function(b) { b.setAttribute("aria-pressed", "false"); });
+      btn.setAttribute("aria-pressed", "true");
+      state.duration = parseInt(btn.dataset.secs, 10);
+    });
+  });
+  els.useCustom.addEventListener("click", function() {
+    var v = parseInt(els.customSecs.value, 10);
+    if (!v || v < 5) return;
+    els.durationRow.querySelectorAll(".dur").forEach(function(b) { b.setAttribute("aria-pressed", "false"); });
+    state.duration = v;
+  });
+
+  // ---------- Shuffle ----------
+  function shuffle(arr) {
+    var a = arr.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+    }
+    return a;
+  }
+
+  function buildDeck() {
+    state.deck = shuffle(activeCardPool());
+    state.deckIndex = 0;
+  }
+
+  // ---------- Start game ----------
+  els.startBtn.addEventListener("click", function() {
+    if (activeCardPool().length === 0) return;
+    state.teams.forEach(function(team, i) {
+      team.name = team.name.trim() || ("Team " + (i + 1));
+      team.score = 0;
+    });
+    state.activeIndex = 0;
+    buildDeck();
+    resetTimer();
+    renderTeams();
+    renderCard();
+    els.setupView.classList.add("hidden");
+    els.gameView.classList.add("active");
+  });
+
+  els.endGameBtn.addEventListener("click", function() {
+    stopTimer();
+    els.gameView.classList.remove("active");
+    els.setupView.classList.remove("hidden");
+  });
+
+  // ---------- Teams ----------
+  function renderTeams() {
+    els.scoreboard.innerHTML = "";
+    state.teams.forEach(function(team, i) {
+      var panel = document.createElement("button");
+      panel.type = "button";
+      panel.className = "team-panel" + (i === state.activeIndex ? " active" : "");
+
+      var name = document.createElement("div");
+      name.className = "t-name";
+      name.textContent = team.name;
+
+      var score = document.createElement("div");
+      score.className = "t-score";
+      score.textContent = team.score;
+
+      var turn = document.createElement("div");
+      turn.className = "t-turn";
+      turn.textContent = "describing now";
+
+      panel.appendChild(name);
+      panel.appendChild(score);
+      panel.appendChild(turn);
+      panel.addEventListener("click", function() {
+        state.activeIndex = i;
+        renderTeams();
+      });
+      els.scoreboard.appendChild(panel);
+    });
+  }
+
+  // ---------- Card ----------
+  function renderCard() {
+    if (state.deckIndex >= state.deck.length) {
+      buildDeck();
+    }
+    var card = state.deck[state.deckIndex];
+    els.cardCategory.textContent = card.cat;
+    els.cardWord.textContent = card.w;
+    els.tabooList.innerHTML = "";
+    card.taboo.forEach(function(t) {
+      var li = document.createElement("li");
+      li.textContent = t;
+      els.tabooList.appendChild(li);
+    });
+    els.cardMeta.textContent = "card " + (state.deckIndex + 1) + " of " + state.deck.length;
+    els.deckRemaining.textContent = (state.deck.length - state.deckIndex - 1) + " cards left in this deck";
+  }
+
+  function nextCard() {
+    state.deckIndex++;
+    renderCard();
+  }
+
+  function scoreActive(delta) {
+    var team = state.teams[state.activeIndex];
+    team.score = Math.max(0, team.score + delta);
+    renderTeams();
+  }
+
+  els.correctBtn.addEventListener("click", function() { scoreActive(1); nextCard(); });
+  els.skipBtn.addEventListener("click", function() { nextCard(); });
+  els.tabooBtn.addEventListener("click", function() { scoreActive(-1); nextCard(); });
+
+  // ---------- Timer ----------
+  function formatTime(s) {
+    var m = Math.floor(s / 60);
+    var r = s % 60;
+    return m > 0 ? (m + ":" + (r < 10 ? "0" : "") + r) : String(r);
+  }
+
+  function renderTimer() {
+    els.timerDisplay.textContent = formatTime(state.timeLeft);
+    els.timerDisplay.classList.toggle("low", state.timeLeft <= 10);
+    els.playPauseBtn.textContent = state.running ? "❚❚" : "▶";
+  }
+
+  function resetTimer() {
+    stopTimer();
+    state.timeLeft = state.duration;
+    renderTimer();
+  }
+  els.resetTimerBtn.addEventListener("click", resetTimer);
+
+  function beep() {
+    try {
+      var ctx = new (window.AudioContext || window.webkitAudioContext)();
+      var osc = ctx.createOscillator();
+      var gain = ctx.createGain();
+      osc.type = "square";
+      osc.frequency.value = 660;
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.5);
+    } catch (e) { /* audio not available, skip silently */ }
+  }
+
+  function startTimer() {
+    if (state.running) return;
+    if (state.timeLeft <= 0) state.timeLeft = state.duration;
+    state.running = true;
+    renderTimer();
+    state.intervalId = setInterval(function() {
+      state.timeLeft--;
+      if (state.timeLeft <= 0) {
+        state.timeLeft = 0;
+        renderTimer();
+        stopTimer();
+        beep();
+        showBuzz();
+        return;
+      }
+      renderTimer();
+    }, 1000);
+  }
+
+  function stopTimer() {
+    state.running = false;
+    if (state.intervalId) { clearInterval(state.intervalId); state.intervalId = null; }
+    renderTimer();
+  }
+
+  els.playPauseBtn.addEventListener("click", function() {
+    if (state.running) stopTimer(); else startTimer();
+  });
+
+  function nextTeamIndex() {
+    return (state.activeIndex + 1) % state.teams.length;
+  }
+
+  function showBuzz() {
+    var nextTeam = state.teams[nextTeamIndex()];
+    els.buzzText.textContent = "Pass the device to " + nextTeam.name + ".";
+    els.buzzOverlay.classList.add("show");
+  }
+  els.buzzContinue.addEventListener("click", function() {
+    els.buzzOverlay.classList.remove("show");
+    state.activeIndex = nextTeamIndex();
+    renderTeams();
+    resetTimer();
+  });
+
+  renderTimer();
+})();
+</script>
+</body>
+</html>
